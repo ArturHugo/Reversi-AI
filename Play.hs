@@ -4,14 +4,15 @@ module Play where
   data Player = PlayerW | PlayerB deriving (Eq, Show)
   
   idx :: Position -> Int
-  idx pos = (fst pos) * width + (snd pos)
+  idx (x, y) = x * width + y
 
   checkValid :: Board -> Position -> Bool
   checkValid board pos
-    | snd (board !! (idx pos)) == Empty = True
+    | (snd (board !! (idx pos)) == Empty) && ((length (getAdjList board pos)) /= 0) = True
     | otherwise = False
 
---  getAdjList :: Board -> 
+  getAdjList :: Board -> Position -> [Position]
+  getAdjList board (x, y) = [fst (board !! (idx (i, j))) | i <- [x-1..x+1], j <- [y-1..y+1], snd (board !! (idx (i, j))) /= Empty, (i, j) /= (x, y) ]
 
   move :: Board -> Position -> Player -> Board
   move board pos player
