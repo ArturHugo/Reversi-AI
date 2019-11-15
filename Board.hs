@@ -10,15 +10,15 @@ module Board where
     | otherwise = " "
   type Position = (Int, Int)
   type Board = [(Position, Piece)]
-  width = 8
-  height = 8
+  width = 4
+  height = 4
 
   positions = [(x, y) | x <- [0..height-1], y <- [0..width-1]]
   emptyBoard = [initBoard pos | pos <- positions]
   initBoard :: Position -> (Position, Piece)
   initBoard pos
-    | pos == (3,3) || pos == (4,4) = (pos, White)
-    | pos == (3,4) || pos == (4,3) = (pos,Black)
+    | pos == (width `div` 2 - 1, height `div` 2 - 1) || pos == (width `div` 2, height `div` 2) = (pos, White)
+    | pos == (width `div` 2 - 1, height `div` 2) || pos == (width `div` 2, height `div` 2 - 1) = (pos,Black)
     | otherwise = (pos, Empty)
 
   lineSeparator :: Int -> String
@@ -34,7 +34,7 @@ module Board where
 
   boardToStr :: Board -> String
   boardToStr [] = ""
-  boardToStr [(lastPos, lastPiece)] = (showPiece lastPiece) ++ "\n" ++ (rowIdxs (snd lastPos))
+  boardToStr [(lastPos, lastPiece)] = " " ++ (showPiece lastPiece) ++ "\n" ++ (rowIdxs (snd lastPos))
   boardToStr ((curPos, curPiece):rest)
     | snd curPos == 0 = show (fst curPos) ++ restOfLine
     | otherwise = restOfLine
