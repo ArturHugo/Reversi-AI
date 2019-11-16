@@ -4,7 +4,11 @@ module AI where
   import Play
 
   moveScore :: Board -> Position -> Player -> Int
-  moveScore board pos player = length $ getAllFlipLists board pos player
+  moveScore board pos player
+    | piece /= Empty = 0
+    | otherwise = length $ getAllFlipLists board pos player
+    where
+      piece = snd (board !! idx pos)
 
   allMoveScores :: Board -> [Position] -> Player -> [(Position, Int)]
   allMoveScores _ [] _ = []
