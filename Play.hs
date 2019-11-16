@@ -6,7 +6,7 @@ module Play where
 
   countScore :: Board -> Player -> Int
   countScore board player =
-    (length . filter(== piece)) [snd (board !! x)| x <- [0..(length board)-1]]
+    (length . filter(== piece)) [snd (board !! x) | x <- [0..(length board)-1]]
     where
       piece
         | player == PlayerW = White

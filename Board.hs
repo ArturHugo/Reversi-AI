@@ -10,8 +10,8 @@ module Board where
     | otherwise = " "
   type Position = (Int, Int)
   type Board = [(Position, Piece)]
-  width = 4
-  height = 4
+  width = 8
+  height = 8
 
   positions = [(x, y) | x <- [0..height-1], y <- [0..width-1]]
   emptyBoard = [initBoard pos | pos <- positions]
