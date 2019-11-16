@@ -6,7 +6,7 @@ module Play where
 
   countScore :: Board -> Player -> Int
   countScore board player =
-    (length . filter(== piece)) [snd (board !! x) | x <- [0..(length board)-1]]
+    (length . filter(== piece)) [snd (board !! x) | x <- [0..length board-1]]
     where
       piece
         | player == PlayerW = White
@@ -24,7 +24,7 @@ module Play where
 
   checkValid :: Board -> Position -> Player -> Bool
   checkValid board pos player
-    | (snd (board !! (idx pos)) == Empty) && (((getAllFlipLists board pos player)) /= []) = True
+    | (snd (board !! idx pos) == Empty) && (getAllFlipLists board pos player /= []) = True
     | otherwise = False
 
   moveDir :: Position -> Direction -> Position
@@ -47,21 +47,21 @@ module Play where
     | otherwise = acc
     where
       nextPos = moveDir pos dir
-      nextPiece = snd (board !! (idx (moveDir pos dir)))
+      nextPiece = snd (board !! idx (moveDir pos dir))
       opPiece
         | player == PlayerW = Black
         | otherwise = White
 
   getAllFlipLists :: Board -> Position -> Player -> [Position]
   getAllFlipLists board (x, y) player =
-    (getFlipList board (x, y) player N [])++
-    (getFlipList board (x, y) player NE [])++
-    (getFlipList board (x, y) player E [])++
-    (getFlipList board (x, y) player SE [])++
-    (getFlipList board (x, y) player S [])++
-    (getFlipList board (x, y) player SW [])++
-    (getFlipList board (x, y) player W [])++
-    (getFlipList board (x, y) player NW [])
+    getFlipList board (x, y) player N []++
+    getFlipList board (x, y) player NE []++
+    getFlipList board (x, y) player E []++
+    getFlipList board (x, y) player SE []++
+    getFlipList board (x, y) player S []++
+    getFlipList board (x, y) player SW []++
+    getFlipList board (x, y) player W []++
+    getFlipList board (x, y) player NW []
 
   move :: Board -> Position -> Player -> Board
   move board pos player
@@ -69,13 +69,13 @@ module Play where
       replace board posList player
     | otherwise = board
     where
-      posList = pos:(getAllFlipLists board pos player)
+      posList = pos:getAllFlipLists board pos player
 
   replace :: Board -> [Position] -> Player -> Board
   replace [] _ _ = []
   replace ((curPos, curPiece):rest) posList player
-    | curPos `elem` posList = (curPos, piece):(replace rest posList player)
-    | otherwise = (curPos, curPiece):(replace rest posList player)
+    | curPos `elem` posList = (curPos, piece):replace rest posList player
+    | otherwise = (curPos, curPiece):replace rest posList player
     where
       piece
         | player == PlayerW = White
